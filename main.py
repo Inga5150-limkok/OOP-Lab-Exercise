@@ -1,15 +1,17 @@
 
 """
 Patient Record System
-Course: PROG211 - Object-Oriented Programming 1
+Module: PROG211 - Object-Oriented Programming 1
 
-Use fictional patient information only.
+DPG Privacy Notice:
+Use fictional demonstration data only.
+Do not enter real patient information.
 """
 
 
-# ==========================================
+# =====================================
 # CLASS 1: PATIENT
-# ==========================================
+# =====================================
 
 class Patient:
 
@@ -31,18 +33,18 @@ class Patient:
     def create_patient(cls, patient_id, name, age, gender):
         return cls(patient_id, name, age, gender)
 
-    # Object interaction
-    def show_record(self, record):
+    # Interaction between Patient and PatientRecord objects
+    def display_patient_record(self, record):
         if self.patient_id == record.patient_id:
-            print("Patient Name:", self.name)
+            print("Patient:", self.name)
             record.display_info()
         else:
-            print("This record does not belong to this patient.")
+            print("This record belongs to another patient.")
 
 
-# ==========================================
+# =====================================
 # CLASS 2: PATIENT RECORD
-# ==========================================
+# =====================================
 
 class PatientRecord:
 
@@ -59,44 +61,44 @@ class PatientRecord:
         print("Visit Date:", self.visit_date)
         print("Status:", self.status)
 
-    # Instance method
-    def update_status(self, new_status):
+    # Instance method to update a record
+    def update_record(self, new_status):
         self.status = new_status
-        print("Record status updated successfully.")
+        print("Record updated successfully.")
 
 
-# ==========================================
+# =====================================
 # CLASS 3: PATIENT RECORD SYSTEM
-# ==========================================
+# =====================================
 
 class PatientRecordSystem:
 
     def __init__(self):
-        # Lists belong to the system object
+        # Lists are the chosen data structure
         self.patients = []
         self.records = []
 
-    # Add a patient to the list
+    # Add a Patient object to the patient list
     def add_patient(self, patient):
-        for existing_patient in self.patients:
-            if existing_patient.patient_id == patient.patient_id:
+        for item in self.patients:
+            if item.patient_id == patient.patient_id:
                 print("Patient ID already exists.")
                 return
 
         self.patients.append(patient)
         print("Patient added successfully.")
 
-    # Display all patients
+    # Display all Patient objects
     def display_patients(self):
         print("\n===== PATIENT LIST =====")
-
-        print("Total patients:", len(self.patients))
 
         for patient in self.patients:
             patient.display_info()
             print("--------------------")
 
-    # Find a patient
+        print("Total patients:", len(self.patients))
+
+    # Search for a patient by ID
     def find_patient(self, patient_id):
         for patient in self.patients:
             if patient.patient_id == patient_id:
@@ -104,16 +106,7 @@ class PatientRecordSystem:
 
         return None
 
-    # Find the index of a patient
-    def patient_index(self, patient_id):
-        patient = self.find_patient(patient_id)
-
-        if patient is not None:
-            return self.patients.index(patient)
-
-        return -1
-
-    # Add a patient record to the list
+    # Add a PatientRecord object to the record list
     def add_record(self, record):
         patient = self.find_patient(record.patient_id)
 
@@ -121,25 +114,25 @@ class PatientRecordSystem:
             print("Patient does not exist.")
             return
 
-        for existing_record in self.records:
-            if existing_record.record_id == record.record_id:
+        for item in self.records:
+            if item.record_id == record.record_id:
                 print("Record ID already exists.")
                 return
 
         self.records.append(record)
         print("Record added successfully.")
 
-    # Display all records
+    # Display all PatientRecord objects
     def display_records(self):
         print("\n===== PATIENT RECORDS =====")
-
-        print("Total records:", len(self.records))
 
         for record in self.records:
             record.display_info()
             print("--------------------")
 
-    # Display records belonging to one patient
+        print("Total records:", len(self.records))
+
+    # Demonstrate interaction between objects
     def display_patient_records(self, patient_id):
         patient = self.find_patient(patient_id)
 
@@ -150,100 +143,71 @@ class PatientRecordSystem:
         found = False
 
         for record in self.records:
-            if record.patient_id == patient_id:
-                patient.show_record(record)
+            if record.patient_id == patient.patient_id:
+                patient.display_patient_record(record)
                 found = True
 
         if not found:
             print("No records found for this patient.")
 
-    # Remove a patient who has no records
-    def remove_patient(self, patient_id):
-        patient = self.find_patient(patient_id)
 
-        if patient is None:
-            print("Patient not found.")
-            return
-
-        for record in self.records:
-            if record.patient_id == patient_id:
-                print("Cannot remove a patient who has records.")
-                return
-
-        self.patients.remove(patient)
-        print("Patient removed successfully.")
-
-
-# ==========================================
-# MAIN PROGRAM
-# ==========================================
+# =====================================
+# MAIN PROGRAM: TEST THE CLASSES
+# =====================================
 
 def main():
 
     # Create the system object
     system = PatientRecordSystem()
 
-    print("===== PATIENT RECORD SYSTEM =====")
-
-    # Create patient objects
+    # Create Patient objects
     patient1 = Patient("P001", "Abdul Kamara", 25, "Male")
     patient2 = Patient("P002", "Fatmata Koroma", 31, "Female")
 
-    # Create another patient using the class method
+    # Create another Patient object using the class method
     patient3 = Patient.create_patient(
         "P003", "Mohamed Conteh", 40, "Male"
     )
 
-    # Add patient objects to the list
+    # Add patients to the system
     system.add_patient(patient1)
     system.add_patient(patient2)
     system.add_patient(patient3)
 
-    # Display patients and count list items
+    # Display the patient list
     system.display_patients()
 
-    # Find the index of a patient
-    position = system.patient_index("P002")
-    print("\nIndex of P002:", position)
-
-    # Create record objects
+    # Create PatientRecord objects
     record1 = PatientRecord(
         "R001", "P001", "2026-10-08", "Active"
     )
 
     record2 = PatientRecord(
-        "R002", "P002", "2026-10-08", "Active"
+        "R002", "P002", "2026-10-09", "Active"
     )
 
     record3 = PatientRecord(
-        "R003", "P003", "2026-10-08", "Active"
+        "R003", "P003", "2026-10-10", "Active"
     )
 
-    # Add records to the record list
+    # Add records to the system
     system.add_record(record1)
     system.add_record(record2)
     system.add_record(record3)
 
-    # Display and count records
+    # Display the record list
     system.display_records()
 
     # Demonstrate interaction between objects
-    print("\n===== PATIENT RECORD SEARCH =====")
-    system.display_patient_records("P002")
+    print("\n===== OBJECT INTERACTION =====")
+    system.display_patient_records("P001")
 
-    # Update a record using its instance method
+    # Demonstrate an instance method
     print("\n===== UPDATE RECORD =====")
-    record1.update_status("Completed")
+    record1.update_record("Completed")
     record1.display_info()
 
-    # Demonstrate removing a patient without records
-    print("\n===== REMOVE PATIENT =====")
-    system.remove_patient("P003")
-
-    # Display the updated patient list
-    system.display_patients()
-
-    print("\nProgram finished successfully.")
+    print("\nProgram completed successfully.")
 
 
 if __name__ == "__main__":
